@@ -43,7 +43,7 @@ From Xcode, just go to:
 * Name your file Dummy or whatever you want
 * In the Group dropdown, make sure to select your project and your app as the target
 ##### 2. Create Bridging Header 
-Xcode will ask if you want to create a bridging header. Click create. If you accidentally press “Don’t Create ”… no big deal. Go to File > New > File. Select Header File, the name you choose does not matter but Xcode normally names it projectName-Bridging-Header
+Xcode will ask if you want to create a bridging header. Click create. If you accidentally press “Don’t Create", go to File > New > File. Select Header File, and name it your_app_name-Bridging-Header
 
 ## Usage
 ```javascript

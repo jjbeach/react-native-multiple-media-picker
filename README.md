@@ -1,12 +1,26 @@
 # react-native-multiple-media-picker
+Please note that this library is still in an experimental stage and currently only works for iOS.
 
 ## Getting started
+### 1. Install package
 
 `$ npm install react-native-multiple-media-picker --save`
 
-### Mostly automatic installation
+or
 
-`$ react-native link react-native-multiple-media-picker`
+`$ yarn add react-native-multiple-media-picker`
+
+
+### 2. Setup native dependencies (iOS)
+
+2.1: In your React Native project, navigate to `ios` folder and add the following line to your Podfile
+```ruby
+pod 'BSImagePicker', :git => 'https://github.com/jjbeach/BSImagePicker'
+```
+
+2.2: Open your_react_native_project.xcworkspace and do the following:
+
+### 3. Update your 
 
 ## Usage
 ```javascript
@@ -15,31 +29,3 @@ import MultipleMediaPicker from 'react-native-multiple-media-picker';
 // TODO: What to do with the module?
 MultipleMediaPicker;
 ```
-
-Usage: npm <command>
-
-where <command> is one of:
-    access, adduser, audit, bin, bugs, c, cache, ci, cit,
-    clean-install, clean-install-test, completion, config,
-    create, ddp, dedupe, deprecate, dist-tag, docs, doctor,
-    edit, explore, fund, get, help, help-search, hook, i, init,
-    install, install-ci-test, install-test, it, link, list, ln,
-    login, logout, ls, org, outdated, owner, pack, ping, prefix,
-    profile, prune, publish, rb, rebuild, repo, restart, root,
-    run, run-script, s, se, search, set, shrinkwrap, star,
-    stars, start, stop, t, team, test, token, tst, un,
-    uninstall, unpublish, unstar, up, update, v, version, view,
-    whoami
-
-npm <command> -h  quick help on <command>
-npm -l            display full usage info
-npm help <term>   search for help on <term>
-npm help npm      involved overview
-
-Specify configs in the ini-formatted file:
-    /Users/joshuabeach/.npmrc
-or on the command line via: npm <command> --key value
-Config info can be viewed via: npm help config
-
-npm@6.13.7 /usr/local/lib/node_modules/npm
-

@@ -1,7 +1,7 @@
 {
   "name": "react-native-multiple-media-picker",
   "title": "React Native Multiple Media Picker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A multiple select media picker for React Native derived from Joakim Gyllström's (@mikaoj) BSImagePicker on iOS",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-multiple-media-picker.git",
-    "baseUrl": "https://github.com/github_account/react-native-multiple-media-picker"
+    "url": "git+https://github.com/jjbeach/react-native-multiple-media-picker.git",
+    "baseUrl": "https://github.com/jjbeach/react-native-multiple-media-picker"
   },
   "keywords": [
     "react-native"

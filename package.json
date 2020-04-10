@@ -2,7 +2,7 @@
   "name": "react-native-multiple-media-picker",
   "title": "React Native Multiple Media Picker",
   "version": "0.0.1",
-  "description": "A multiple select media picker derived from Joakim Gyllström's (@mikaoj) BSImagePicker on iOS",
+  "description": "A multiple select media picker for React Native derived from Joakim Gyllström's (@mikaoj) BSImagePicker on iOS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

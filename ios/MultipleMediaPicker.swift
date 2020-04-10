@@ -22,6 +22,8 @@ class MultipleMediaPicker: UIViewController {
             imagePicker.settings.selection.max = 5
             imagePicker.settings.theme.selectionStyle = .numbered
             imagePicker.settings.fetch.assets.supportedMediaTypes = [.image, .video]
+
+            Settings.shared.theme.dropDownHeight = 700
             
             if(selectedPhLocalIds != nil) {
                 let allAssets = PHAsset.fetchAssets(with: .image, options: nil)

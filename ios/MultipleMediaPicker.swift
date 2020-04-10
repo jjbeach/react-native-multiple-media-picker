@@ -23,6 +23,7 @@ class MultipleMediaPicker: UIViewController {
             imagePicker.settings.theme.selectionStyle = .numbered
             imagePicker.settings.fetch.assets.supportedMediaTypes = [.image, .video]
 
+            //ToDo: include dropDownHeight as a param in showMediaPicker
             Settings.shared.theme.dropDownHeight = 700
             
             if(selectedPhLocalIds != nil) {

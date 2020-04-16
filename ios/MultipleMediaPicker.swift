@@ -26,7 +26,6 @@ class MultipleMediaPicker: UIViewController {
                 return;
             }
             DispatchQueue.main.async {
-                
                 //Options
                 var maxFiles : Int = 4;
                 var selectedPhLocalIds : [String] = [];
@@ -69,7 +68,7 @@ class MultipleMediaPicker: UIViewController {
                 
                 imagePicker.settings.fetch.album.fetchResults = [
                     PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil),
-                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: imagePicker.settings.fetch.album.options)
+                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: imagePicker.settings.fetch.album.options)
                 ]
                 imagePicker.settings.selection.unselectOnReachingMax = true
                 let start = Date()

@@ -58,20 +58,11 @@ class MultipleMediaPicker: UIViewController {
                 
                 //ToDo: include dropDownHeight as a param in showMediaPicker
                 Settings.shared.theme.dropDownHeight = 700
-                
-                var imgDataObjs = [ImgDataObj]()
-                
+                                
                 if(!selectedPhLocalIds.isEmpty) {
                     var foundAssets = [PHAsset]()
                     PHAsset.fetchAssets(withLocalIdentifiers: selectedPhLocalIds, options: nil).enumerateObjects({ (asset, idx, stop) -> Void in
                         foundAssets.append(asset)
-                        
-                        asset.getContentEditingInput(){ cei in
-                            asset.appendImgDataObjs(
-                                imgDataObj: asset.buildImgDataObjFromContentEditingInput(contentEditingInput: cei),
-                                imgDataObjs: &imgDataObjs
-                            )
-                        }
                     })
                     imagePicker.assetStore = AssetStore(assets: foundAssets)
                 }
@@ -87,27 +78,14 @@ class MultipleMediaPicker: UIViewController {
                     imagePicker,
                     select: { (asset) in
                         print("Selected: \(asset)")
-                        
-                        asset.getContentEditingInput(){ cei in
-                            asset.appendImgDataObjs(
-                                imgDataObj: asset.buildImgDataObjFromContentEditingInput(contentEditingInput: cei),
-                                imgDataObjs: &imgDataObjs
-                            )
-                        }
-                        
-                        
                 }, deselect: { (asset) in
                     print("Deselected: \(asset)")
-                    
-                    if let foundIndex = imgDataObjs.firstIndex(where: {(imgDataObj: ImgDataObj) -> Bool in asset.localIdentifier == imgDataObj.phAssetLocalId }) {
-                        imgDataObjs.remove(at: foundIndex)
-                    }
-                    
                 }, cancel: { (assets) in
                     print("Canceled with selections: \(assets)")
                 }, finish: { (assets) in
+                    let result = assets.map {$0.generateJpegImgDataObj().dictionary}
+                    resolve(result)
                     print("Finished with selections: \(assets)")
-                    resolve(imgDataObjs.map {$0.generateJpegImgDataObj().dictionary})
                 }, completion: {
                     let finish = Date()
                     print(finish.timeIntervalSince(start))
@@ -123,35 +101,10 @@ class MultipleMediaPicker: UIViewController {
 }
 
 struct ImgDataObj: Codable {
-    var fullSizeImageURL: String
-    var jpegURL: String
+    var uri: String
     var type: String
     var name: String
     var phAssetLocalId: String
-    
-    func generateJpegImgDataObj() -> ImgDataObj {
-        guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [self.phAssetLocalId], options: nil).firstObject else { return self}
-        let manager = PHCachingImageManager()
-        let options = PHImageRequestOptions()
-        options.version = .original
-        options.isSynchronous = true
-        options.isNetworkAccessAllowed = true
-        var url : String = ""
-        let path : String = "photo/temp/mmp/\(self.phAssetLocalId).jpg"
-        manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: options) { (image, info) in
-            if (image != nil) {
-                url = image?.save(at: .documentDirectory,
-                                  pathAndImageName: path)?.absoluteString ?? ""
-            }
-        }
-        return ImgDataObj(
-            fullSizeImageURL: self.fullSizeImageURL,
-            jpegURL: url,
-            type: "image/jpeg",
-            name: "\(self.phAssetLocalId).jpg",
-            phAssetLocalId: self.phAssetLocalId
-        )
-    }
 }
 
 struct JSON {
@@ -167,7 +120,7 @@ extension Encodable {
     }
 }
 
-extension PHAsset {
+extension PHAsset {    
     func getContentEditingInput(completionHandler: @escaping (PHContentEditingInput?) -> Void) {
         let option = PHContentEditingInputRequestOptions()
         self.requestContentEditingInput(with: option) { contentEditingInput, _ in
@@ -175,28 +128,30 @@ extension PHAsset {
         }
     }
     
-    func buildImgDataObjFromContentEditingInput(contentEditingInput: PHContentEditingInput?) -> ImgDataObj {
-        var imgDataObj = ImgDataObj(
-            fullSizeImageURL: "",
-            jpegURL: "",
-            type: "",
-            name:"",
-            phAssetLocalId: ""
+    func generateJpegImgDataObj() -> ImgDataObj {
+        let manager = PHCachingImageManager()
+        let options = PHImageRequestOptions()
+        options.version = .original
+        options.isSynchronous = true
+        options.isNetworkAccessAllowed = true
+        var url : String = ""
+        let path : String = "photo/temp/mmp/\(self.localIdentifier).jpg"
+        manager.requestImage(for: self, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: options) { (image, info) in
+            if (image != nil) {
+                url = image?.save(at: .documentDirectory,
+                                  pathAndImageName: path)?.absoluteString ?? ""
+            }
+        }
+        return ImgDataObj(
+            uri: url,
+            type: "image/jpeg",
+            name: "\(self.localIdentifier).jpg",
+            phAssetLocalId: self.localIdentifier
         )
-        
-        imgDataObj.fullSizeImageURL = contentEditingInput?.fullSizeImageURL?.absoluteString ?? ""
-        imgDataObj.phAssetLocalId = self.localIdentifier
-        
-        return imgDataObj
-    }
-    
-    func appendImgDataObjs(imgDataObj: ImgDataObj, imgDataObjs: inout [ImgDataObj]) {
-        imgDataObjs.append(imgDataObj)
     }
 }
 
 extension UIImage {
-    
     func save(at directory: FileManager.SearchPathDirectory,
               pathAndImageName: String,
               createSubdirectoriesIfNeed: Bool = true,

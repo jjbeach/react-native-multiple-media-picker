@@ -67,8 +67,11 @@ class MultipleMediaPicker: UIViewController {
                 }
                 
                 imagePicker.settings.fetch.album.fetchResults = [
-                    PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil),
-                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: imagePicker.settings.fetch.album.options)
+                    PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: imagePicker.settings.fetch.album.options),
+                    PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumFavorites, options: imagePicker.settings.fetch.album.options),
+                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: imagePicker.settings.fetch.album.options),
+                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: imagePicker.settings.fetch.album.options),
+                    PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: imagePicker.settings.fetch.album.options),
                 ]
                 imagePicker.settings.selection.unselectOnReachingMax = true
                 let start = Date()
@@ -133,6 +136,7 @@ extension PHAsset {
         options.version = .original
         options.isSynchronous = true
         options.isNetworkAccessAllowed = true
+        options.version = PHImageRequestOptionsVersion.current
         var url : String = ""
         let path : String = "photo/temp/mmp/\(self.localIdentifier).jpg"
         manager.requestImage(for: self, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: options) { (image, info) in
